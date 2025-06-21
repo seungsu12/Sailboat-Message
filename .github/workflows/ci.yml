@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 3 실행 환경 지정
+    #4 실행스텝지정
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'  # Go 버전 명시 (최신 안정버전 기준)
+
+      - name: Build Go project
+        run: go build -v ./...
+
+      - name: Run tests
+        run: go test -v ./...
