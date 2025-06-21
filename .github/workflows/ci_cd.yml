@@ -35,6 +35,10 @@ jobs:
         run: |
           scp sailboat ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}
 
-      - name: SSH and restart service
+      - name: Restart sailboat service via systemd
         run: |
-          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "pkill sailboat || true && chmod +x ${{ secrets.DEPLOY_PATH }}/sailboat && nohup ${{ secrets.DEPLOY_PATH }}/sailboat > app.log 2>&1 &"
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
+            sudo systemctl daemon-reload
+            sudo systemctl restart sailboat
+            sudo systemctl status sailboat --no-pager
+            "
